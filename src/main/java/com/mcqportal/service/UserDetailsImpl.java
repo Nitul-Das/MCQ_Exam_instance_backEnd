@@ -14,13 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 public class UserDetailsImpl implements UserDetails {
     private  Long id;
+    private String firstname;
     private  String email;
     private  String password;
     private  User.Role role;
     private  Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String email, String password, User.Role role) {
+    public UserDetailsImpl(Long id,String firstname, String email, String password, User.Role role) {
         this.id = id;
+        this.firstname= firstname;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -30,6 +32,7 @@ public class UserDetailsImpl implements UserDetails {
     public static UserDetailsImpl build(User user) {
         return new UserDetailsImpl(
                 user.getId(),
+                user.getFirstName(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getRole()
@@ -37,6 +40,10 @@ public class UserDetailsImpl implements UserDetails {
     }
 
 
+    // Add getter for name (firstname)
+    public String getFirstName() {
+        return firstname;
+    }
     @Override
     public String getUsername() {
         return email;
