@@ -14,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.mcqportal.dtos.AuthResponse.*;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -26,7 +28,7 @@ public class AuthService {
 
     public void register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email is already in use");
+            throw new RuntimeException("Email is already in used");
         }
         User user = User.builder()
                 .firstName(request.getFirstName())
@@ -47,11 +49,12 @@ public class AuthService {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String token = jwtUtil.generateToken(userDetails);
 
-        return AuthResponse.builder()
+        return builder()
                 .token(token)
                 .role(userDetails.getRole().name())
                 .id(userDetails.getId())
                 .email(userDetails.getEmail())
+                .firstname(userDetails.getFirstName())
                 .build();
     }
 }
