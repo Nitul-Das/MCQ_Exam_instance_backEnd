@@ -1,10 +1,11 @@
 package com.mcqportal.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -32,6 +33,16 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "creator", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Exam> createdExams = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student")
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Result> results = new ArrayList<>();
 
     public enum Role {
         STUDENT,
