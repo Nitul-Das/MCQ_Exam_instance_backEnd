@@ -26,7 +26,7 @@ public class UserDetailsImpl implements UserDetails {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.authorities = List.of(new SimpleGrantedAuthority(role.name()));
+        this.authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     public static UserDetailsImpl build(User user) {

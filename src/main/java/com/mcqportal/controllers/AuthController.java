@@ -1,6 +1,5 @@
 package com.mcqportal.controllers;
 
-
 import com.mcqportal.dtos.AuthResponse;
 import com.mcqportal.dtos.LoginRequest;
 import com.mcqportal.dtos.RegisterRequest;
@@ -20,20 +19,17 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-        authService.register(request);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body("User registered successfully");
+    public ResponseEntity<String> register(
+            @Valid @RequestBody RegisterRequest request) {
+        try {
+            authService.register(request);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("User registered successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed: " + e.getMessage());
+        }
     }
-
-
-//    @PostMapping("/login")
-//    public ResponseEntity<AuthResponse> login(
-//            @Valid @RequestBody LoginRequest request) {
-//        AuthResponse response = authService.login(request);
-//        return ResponseEntity.ok(response);
-//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
@@ -46,5 +42,4 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
-
 }
